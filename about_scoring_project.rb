@@ -35,26 +35,17 @@ def score(dice)
 
   g = dice.group_by { |i| i%7 }
 
-  1.upto(6) do |i|
-    unless g[i].nil?
-      case i
-      when 1
-        if g[i].count >= 3
-          g[i].slice!(0..2)
-          score += 1000 + (g[i].count * 100)
-        else
-           score += (g[i].count * 100)
-        end
-      when 5
-        if g[i].count >= 3
-          g[i].slice!(0..2)
-          score += (i * 100) + (g[i].count * 50)
-        else
-          score += (g[i].count * 50)
-        end
+  g.keys.each do |i|
+    if i == 1 || i == 5
+      mult = i == 1 ? 2 : 1
+      if g[i].count >= 3
+        g[i].slice!(0..2)
+        score += (500*mult) + (g[i].count * (50*mult))
       else
-        score += (i * 100) if g[i].count == 3
+         score += (g[i].count * (50*mult))
       end
+    else
+      score += (i * 100) if g[i].count == 3
     end
   end
   score
